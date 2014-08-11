@@ -2042,6 +2042,34 @@
   ]
 },{
   "type" : "recipe",
+  "result": "starter_battery",
+  "category": "CC_ELECTRONIC",
+  "subcategory": "CSC_ELECTRONIC_PARTS",
+  "skill_used": "electronics",
+  "skills_required": [ "electronics", 1 ],
+  "difficulty": 1,
+  "time": 2000,
+  "reversible": true,
+  "decomp_learn": 2,
+  "autolearn": true,
+  "book_learn": [],
+  "qualities" : [
+  ], "tools": [
+    [
+      [ "soldering_iron", 2 ],
+      [ "toolset", 2 ]
+    ]
+  ],
+  "components": [
+    [
+      [ "battery", 100 ]
+    ],
+    [
+      [ "cable", 5 ]
+    ]
+  ]
+},{
+  "type" : "recipe",
   "result": "battery_motorbike",
   "category": "CC_ELECTRONIC",
   "subcategory": "CSC_ELECTRONIC_PARTS",
