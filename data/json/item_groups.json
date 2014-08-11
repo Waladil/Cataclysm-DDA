@@ -4756,6 +4756,7 @@
       ["alternator_car", 6],
       ["alternator_truck", 6],
       ["storage_battery", 6],
+      ["starter_battery", 6],
       ["solar_panel", 3],
       ["recharge_station", 2],
       ["jerrycan", 10],
