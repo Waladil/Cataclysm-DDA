@@ -7,9 +7,26 @@
     },
     {
         "type":"GENERIC",
+        "id" : "xlframe",
+        "name" : "extra-light frame",
+        "description" : "A small lightweight frame made from pipework.  Useful for crafting.",
+        "weight" : 5048,
+        "to_hit" : -3,
+        "color" : "light_gray",
+        "symbol" : "]",
+        "material" : ["steel", "null"],
+        "techniques" : ["DEF_DISARM"],
+        "volume" : 40,
+        "bashing" : 15,
+        "cutting" : 0,
+        "category" : "veh_parts",
+        "price" : 4000
+    },
+    {
+        "type":"GENERIC",
         "id" : "frame",
         "name" : "steel frame",
-        "description" : "A large frame made of steel. Useful for crafting.",
+        "description" : "A large frame made of steel.  Useful for crafting.",
         "weight" : 13607,
         "to_hit" : -5,
         "color" : "cyan",
@@ -20,13 +37,30 @@
         "bashing" : 20,
         "cutting" : 0,
         "category" : "veh_parts",
-        "price" : 55
+        "price" : 5500
+    },
+    {
+        "type":"GENERIC",
+        "id" : "basket",
+        "name" : "wire basket",
+        "description" : "A large wire basket from a shopping cart.",
+        "weight" : 4500,
+        "to_hit" : -5,
+        "color" : "cyan",
+        "symbol" : "]",
+        "material" : ["steel", "null"],
+        "techniques" : ["DEF_DISARM"],
+        "volume" : 60,
+        "bashing" : 20,
+        "cutting" : 0,
+        "category" : "veh_parts",
+        "price" : 5500
     },
     {
         "type":"GENERIC",
         "id" : "frame_wood",
         "name" : "wooden frame",
-        "description" : "A large frame made of wood. Useful for crafting.",
+        "description" : "A large frame made of wood.  Useful for crafting.",
         "weight" : 7000,
         "to_hit" : -5,
         "color" : "brown",
@@ -37,7 +71,7 @@
         "bashing" : 16,
         "cutting" : 4,
         "category" : "veh_parts",
-        "price" : 35
+        "price" : 3500
     },
     {
         "type":"GENERIC",
@@ -54,7 +88,7 @@
         "bashing" : 25,
         "cutting" : 0,
         "category" : "veh_parts",
-        "price" : 120
+        "price" : 12000
     },
     {
         "type":"GENERIC",
@@ -65,18 +99,18 @@
         "to_hit" : -4,
         "color" : "red",
         "symbol" : "0",
-        "material" : ["leather", "null"],
+        "material" : ["leather", "aluminum"],
         "volume" : 30,
         "bashing" : 4,
         "cutting" : 0,
         "category" : "veh_parts",
-        "price" : 250
+        "price" : 25000
     },
     {
         "type":"GENERIC",
         "id" : "v_table",
         "name" : "table",
-        "description" : "A very fancy table from a very fancy RV. If times were better it might be useful for something more than firewood.",
+        "description" : "A very fancy table from a very fancy RV.  If times were better it might be useful for something more than firewood.",
         "weight" : 9071,
         "to_hit" : -8,
         "color" : "red",
@@ -86,7 +120,7 @@
         "bashing" : 6,
         "cutting" : 0,
         "category" : "veh_parts",
-        "price" : 200
+        "price" : 20000
     },
     {
         "type":"GENERIC",
@@ -97,35 +131,35 @@
         "to_hit" : -4,
         "color" : "red",
         "symbol" : "0",
-        "material" : ["plastic", "null"],
+        "material" : ["plastic", "aluminum"],
         "volume" : 5,
         "bashing" : 2,
         "cutting" : 0,
         "category" : "veh_parts",
-        "price" : 25
+        "price" : 2500
     },
     {
         "type":"GENERIC",
         "id" : "muffler",
         "name" : "muffler",
-        "description" : "A muffler from a car. Very unwieldy as a weapon. Useful in a few crafting recipes.",
+        "description" : "A muffler from a car.  Very unwieldy as a weapon.  Useful in a few crafting recipes.",
         "weight" : 9525,
         "to_hit" : -10,
         "color" : "light_gray",
         "symbol" : "/",
-        "material" : ["iron", "null"],
+        "material" : ["steel", "null"],
         "techniques" : ["WBLOCK_2"],
         "volume" : 14,
         "bashing" : 19,
         "cutting" : 0,
         "category" : "veh_parts",
-        "price" : 30
+        "price" : 3000
     },
     {
         "type":"GENERIC",
         "id" : "vehicle_controls",
         "name" : "vehicle controls",
-        "description" : "A set of various vehicle controls. Useful for crafting.",
+        "description" : "A set of various vehicle controls.  Useful for crafting.",
         "weight" : 2721,
         "to_hit" : -4,
         "color" : "light_cyan",
@@ -135,39 +169,39 @@
         "bashing" : 2,
         "cutting" : 0,
         "category" : "veh_parts",
-        "price" : 400
+        "price" : 40000
     },
     {
         "type":"GENERIC",
         "id" : "motor",
         "name" : "electric motor",
-        "description" : "A powerful electric motor. Useful for crafting.",
+        "description" : "A powerful electric motor.  Useful for crafting.",
         "weight" : 9071,
         "to_hit" : 0,
         "color" : "light_cyan",
         "symbol" : ",",
-        "material" : ["iron", "null"],
+        "material" : ["steel", "null"],
         "volume" : 6,
         "bashing" : 4,
         "cutting" : 0,
         "category" : "veh_parts",
-        "price" : 120
+        "price" : 12000
     },
     {
         "type":"GENERIC",
         "id" : "motor_large",
         "name" : "large electric motor",
-        "description" : "A large and very powerful electric motor. Useful for crafting.",
+        "description" : "A large and very powerful electric motor.  Useful for crafting.",
         "weight" : 73708,
         "to_hit" : -3,
         "color" : "light_cyan",
         "symbol" : ":",
-        "material" : ["iron", "null"],
+        "material" : ["steel", "null"],
         "volume" : 15,
         "bashing" : 9,
         "cutting" : 0,
         "category" : "veh_parts",
-        "price" : 220
+        "price" : 22000
     },
     {
         "type":"GENERIC",
@@ -178,12 +212,12 @@
         "to_hit" : -2,
         "color" : "light_cyan",
         "symbol" : ":",
-        "material" : ["steel", "null"],
+        "material" : ["superalloy", "steel"],
         "volume" : 12,
         "bashing" : 7,
         "cutting" : 0,
         "category" : "veh_parts",
-        "price" : 900
+        "price" : 90000
     },
     {
         "type":"GENERIC",
@@ -194,76 +228,97 @@
         "to_hit" : -1,
         "color" : "light_gray",
         "symbol" : ":",
-        "material" : ["iron", "null"],
+        "material" : ["steel", "null"],
         "volume" : 2,
         "bashing" : 10,
         "cutting" : 0,
         "category" : "veh_parts",
-        "price" : 90
+        "price" : 9000
+    },
+    {
+        "type":"GENERIC",
+        "id" : "hand_rims",
+        "name" : "set of hand rims",
+        "name_plural" : "sets of hand rims",
+        "description" : "Hand rims for use on a wheelchair.",
+        "weight" : 816,
+        "to_hit" : -1,
+        "color" : "light_gray",
+        "symbol" : ":",
+        "material" : ["steel", "null"],
+        "volume" : 2,
+        "bashing" : 10,
+        "cutting" : 0,
+        "category" : "veh_parts",
+        "price" : 9000
     },
     {
         "type":"GENERIC",
         "id" : "small_storage_battery",
         "name" : "small storage battery",
-        "description" : "A small storage battery. Useful for crafting.",
+        "name_plural" : "small storage batteries",
+        "description" : "A small storage battery.  Useful for crafting.",
         "weight" : 230,
         "to_hit" : -2,
         "color" : "light_cyan",
         "symbol" : ":",
-        "material" : ["iron", "null"],
+        "material" : ["plastic", "null"],
         "volume" : 2,
         "bashing" : 1,
         "cutting" : 0,
         "category" : "veh_parts",
-        "price" : 50
+        "price" : 5000
     },
     {
         "type":"GENERIC",
         "id" : "battery_motorbike",
         "name" : "motorbike battery",
+        "name_plural" : "motorbike batteries",
         "description" : "A 12v lead-acid battery used to power smaller vehicles' electrical systems.",
         "weight" : 13250,
         "to_hit" : -2,
         "color" : "light_cyan",
         "symbol" : ":",
-        "material" : ["iron", "null"],
+        "material" : ["plastic", "null"],
         "volume" : 3,
         "bashing" : 2,
         "cutting" : 0,
         "category" : "veh_parts",
-        "price" : 20
+        "price" : 2000
     },
     {
         "type":"GENERIC",
         "id" : "battery_car",
         "name" : "car battery",
+        "name_plural" : "car batteries",
         "description" : "A 12v lead-acid battery used to power car electrical systems.",
         "weight" : 17640,
         "to_hit" : -2,
         "color" : "light_cyan",
         "symbol" : ":",
-        "material" : ["iron", "null"],
+        "material" : ["plastic", "null"],
         "volume" : 4,
         "bashing" : 3,
         "cutting" : 0,
         "category" : "veh_parts",
-        "price" : 40
+        "price" : 4000
     },
     {
         "type":"GENERIC",
         "id" : "battery_truck",
         "name" : "truck battery",
+        "name_plural" : "truck batteries",
         "description" : "A large 12v lead-acid battery used to power truck electrical systems.",
         "weight" : 20000,
         "to_hit" : -2,
         "color" : "light_cyan",
         "symbol" : ":",
-        "material" : ["iron", "null"],
+        "material" : ["plastic", "null"],
         "volume" : 6,
         "bashing" : 5,
         "cutting" : 0,
         "category" : "veh_parts",
-        "price" : 60
+        "price" : 6000
     },
     {
         "type":"GENERIC",
@@ -274,12 +329,12 @@
         "to_hit" : -2,
         "color" : "light_cyan",
         "symbol" : ",",
-        "material" : ["iron", "null"],
+        "material" : ["steel", "plastic"],
         "volume" : 4,
         "bashing" : 4,
         "cutting" : 0,
         "category" : "veh_parts",
-        "price" : 400
+        "price" : 40000
     },
     {
         "type":"GENERIC",
@@ -290,12 +345,12 @@
         "to_hit" : -2,
         "color" : "light_cyan",
         "symbol" : ",",
-        "material" : ["iron", "null"],
+        "material" : ["steel", "null"],
         "volume" : 5,
         "bashing" : 4,
         "cutting" : 0,
         "category" : "veh_parts",
-        "price" : 60
+        "price" : 6000
     },
     {
         "type":"GENERIC",
@@ -306,12 +361,12 @@
         "to_hit" : -3,
         "color" : "light_cyan",
         "symbol" : ",",
-        "material" : ["iron", "null"],
+        "material" : ["steel", "null"],
         "volume" : 6,
         "bashing" : 4,
         "cutting" : 0,
         "category" : "veh_parts",
-        "price" : 90
+        "price" : 9000
     },
     {
         "type":"GENERIC",
@@ -322,50 +377,51 @@
         "to_hit" : -4,
         "color" : "light_cyan",
         "symbol" : ",",
-        "material" : ["iron", "null"],
+        "material" : ["steel", "null"],
         "volume" : 7,
         "bashing" : 4,
         "cutting" : 0,
         "category" : "veh_parts",
-        "price" : 120
+        "price" : 12000
     },
     {
         "type":"GENERIC",
         "id" : "storage_battery",
         "name" : "storage battery",
-        "description" : "A large storage battery. Useful for crafting.",
+        "name_plural" : "storage batteries",
+        "description" : "A large storage battery.  Useful for crafting.",
         "weight" : 22679,
         "to_hit" : -2,
         "color" : "light_cyan",
         "symbol" : ":",
-        "material" : ["iron", "null"],
+        "material" : ["plastic", "steel"],
         "volume" : 8,
         "bashing" : 6,
         "cutting" : 0,
         "category" : "veh_parts",
-        "price" : 80
+        "price" : 8000
     },
     {
         "type":"GENERIC",
         "id" : "minireactor",
         "name" : "minireactor",
-        "description" : "A small portable plutonium reactor. Handle with great care!",
+        "description" : "A small portable plutonium reactor.  Handle with great care!",
         "weight" : 27215,
         "to_hit" : -4,
         "color" : "light_cyan",
         "symbol" : ":",
-        "material" : ["steel", "null"],
+        "material" : ["superalloy", "ceramic"],
         "volume" : 6,
         "bashing" : 7,
         "cutting" : 0,
         "category" : "veh_parts",
-        "price" : 900
+        "price" : 90000
     },
     {
         "type":"GENERIC",
         "id" : "solar_panel",
         "name" : "solar panel",
-        "description" : "Electronic device that can convert solar radiation into electric power. Useful for crafting.",
+        "description" : "Electronic device that can convert solar radiation into electric power.  Useful for a vehicle.",
         "weight" : 14000,
         "to_hit" : -4,
         "color" : "yellow",
@@ -375,14 +431,14 @@
         "bashing" : 1,
         "cutting" : 0,
         "category" : "veh_parts",
-        "price" : 900
+        "price" : 90000
     },
     {
         "type":"GENERIC",
         "id" : "reinforced_solar_panel",
         "name" : "reinforced solar panel",
-        "description" : "A solar panel that has been covered with a pane of reinforced glass to protect the delicate solar cells from zombies or errant baseballs.  Useful for crafting.",
-        "weight" : 24143,
+        "description" : "A solar panel that has been covered with a pane of reinforced glass to protect the delicate solar cells from zombies or errant baseballs.  The glass causes this panel to produce slightly less power than a normal panel.  Useful for a vehicle.",
+        "weight" : 24153,
         "to_hit" : -4,
         "color" : "light_blue",
         "symbol" : "]",
@@ -391,7 +447,55 @@
         "bashing" : 1,
         "cutting" : 0,
         "category" : "veh_parts",
+        "price" : 120000
+    },
+    {
+        "type":"GENERIC",
+        "id" : "solar_panel_v2",
+        "name" : "upgraded solar panel",
+        "description" : "Electronic device that can convert solar radiation into electric power.  This panel has been upgraded to convert more sunlight into power.  Useful for a vehicle.",
+        "weight" : 18494,
+        "to_hit" : -4,
+        "color" : "yellow",
+        "symbol" : "]",
+        "material" : ["glass", "null"],
+        "volume" : 18,
+        "bashing" : 1,
+        "cutting" : 0,
+        "category" : "veh_parts",
         "price" : 900
+    },
+    {
+        "type":"GENERIC",
+        "id" : "reinforced_solar_panel_v2",
+        "name" : "upgraded reinforced solar panel",
+        "description" : "An upgraded solar panel that has been covered with a pane of reinforced glass to protect the delicate solar cells from zombies or errant baseballs.  The glass causes this panel to produce slightly less power than a normal upgraded panel.  Useful for a vehicle.",
+        "weight" : 29062,
+        "to_hit" : -5,
+        "color" : "light_blue",
+        "symbol" : "]",
+        "material" : ["glass", "steel"],
+        "volume" : 30,
+        "bashing" : 1,
+        "cutting" : 0,
+        "category" : "veh_parts",
+        "price" : 900
+    },
+    {
+        "type":"GENERIC",
+        "id" : "solar_panel_v3",
+        "name" : "quantum solar panel",
+        "description" : "This solar panel is obviously cutting-edge technology and given where you found it, should probably provide a LOT of power.  It's covered in strange-looking material, but the covering looks rather fragile; it doesn't look like it could support a reinforcing sheet, either.",
+        "weight" : 14000,
+        "to_hit" : -5,
+        "color" : "yellow",
+        "symbol" : "]",
+        "material" : ["glass", "steel"],
+        "volume" : 18,
+        "bashing" : 1,
+        "cutting" : 0,
+        "category" : "veh_parts",
+        "price" : 9000
     },
     {
         "type": "GENERIC",
@@ -407,14 +511,14 @@
         "bashing": 8,
         "cutting": 0,
         "category" : "veh_parts",
-        "price": 600
+        "price": 60000
     },
     {
         "type":"GENERIC",
         "id" : "solar_cell",
         "name" : "solar cell",
-        "description" : "A small electronic device that can convert solar radiation into electric power. Useful for crafting.",
-        "weight" : 1000,
+        "description" : "A small electronic device that can convert solar radiation into electric power.  Useful for crafting.",
+        "weight" : 500,
         "to_hit" : -4,
         "color" : "yellow",
         "symbol" : ";",
@@ -423,7 +527,7 @@
         "bashing" : 1,
         "cutting" : 0,
         "category" : "veh_parts",
-        "price" : 50
+        "price" : 5000
     },
     {
         "type":"GENERIC",
@@ -439,7 +543,7 @@
         "bashing" : 5,
         "cutting" : 0,
         "category" : "veh_parts",
-        "price" : 60
+        "price" : 6000
     },
     {
         "type":"GENERIC",
@@ -455,7 +559,7 @@
         "bashing" : 10,
         "cutting" : 0,
         "category" : "veh_parts",
-        "price" : 120
+        "price" : 12000
     },
     {
         "type":"GENERIC",
@@ -471,7 +575,7 @@
         "bashing" : 6,
         "cutting" : 0,
         "category" : "veh_parts",
-        "price" : 120
+        "price" : 12000
     },
     {
         "type":"GENERIC",
@@ -487,7 +591,7 @@
         "bashing" : 6,
         "cutting" : 0,
         "category" : "veh_parts",
-        "price" : 185
+        "price" : 18500
     },
     {
         "type":"GENERIC",
@@ -503,13 +607,13 @@
         "bashing" : -2,
         "cutting" : 0,
         "category" : "veh_parts",
-        "price" : 85
+        "price" : 8500
     },
     {
         "type":"GENERIC",
         "id" : "spiked_plate",
         "name" : "spiked plating",
-        "description" : "A piece of armor plating made of steel. It is covered by menacing spikes.",
+        "description" : "A piece of armor plating made of steel.  It is covered by menacing spikes.",
         "weight" : 12240,
         "to_hit" : -1,
         "color" : "light_cyan",
@@ -520,7 +624,7 @@
         "cutting" : 3,
         "flags" : ["STAB"],
         "category" : "veh_parts",
-        "price" : 185
+        "price" : 18500
     },
     {
         "type":"GENERIC",
@@ -536,7 +640,7 @@
         "bashing" : 6,
         "cutting" : 0,
         "category" : "veh_parts",
-        "price" : 160
+        "price" : 16000
     },
     {
         "type":"GENERIC",
@@ -552,7 +656,23 @@
         "bashing" : 8,
         "cutting" : 0,
         "category" : "veh_parts",
-        "price" : 160
+        "price" : 16000
+    },
+    {
+        "type":"GENERIC",
+        "id" : "water_faucet",
+        "name" : "water faucet",
+        "description" : "A metal faucet that can be attached to a water tank for easy access.",
+        "weight" : 900,
+        "to_hit" : -1,
+        "color" : "light_gray",
+        "symbol" : ";",
+        "material" : ["steel", "null"],
+        "volume" : 3,
+        "bashing" : 2,
+        "cutting" : 0,
+        "category" : "veh_parts",
+        "price" : 3000
     },
     {
         "type":"GENERIC",
@@ -568,7 +688,7 @@
         "bashing" : 0,
         "cutting" : 0,
         "category" : "veh_parts",
-        "price" : 400
+        "price" : 40000
     },
     {
         "type":"GENERIC",
@@ -584,38 +704,56 @@
         "bashing" : 0,
         "cutting" : 0,
         "category" : "veh_parts",
-        "price" : 400
+        "price" : 40000
+    },
+    {
+        "type":"GENERIC",
+        "id" : "forgerig",
+        "name" : "vehicle forge rig",
+        "description" : "A forge rig made to run off a vehicle's storage battery.  Used for forging tools in a vehicle.",
+        "weight" : 10000,
+        "to_hit" : -2,
+        "color" : "light_gray",
+        "symbol" : "&",
+        "material" : ["steel", "null"],
+        "volume" : 24,
+        "bashing" : 8,
+        "cutting" : 0,
+        "category" : "veh_parts",
+        "price" : 40000
     },
     {
         "type":"GENERIC",
         "id" : "craftrig",
         "name" : "FOODCO kitchen buddy",
-        "description" : "Assembled from a set of instructions you found in an old book of DIY projects, the *FOODCO kitchen buddy* claims to be *the perfect solution to all your home-cooking needs!*.  While it is surprisingly handy for vacuum-sealing as well as dehydrating food, the cheery sales pitch neglected to mention A - how awkward the damn thing is, and B - how it doesn't take batteries.  You're going to have to weld it to a vehicle, or something else with a supply of electricity, if you want to use it.  In addition to the cooking features, it also has a water-purification system, a drawer for holding extra tools, and for some insane reason, a press and die set for hand-loading ammunition.",
+        "name_plural" : "FOODCO kitchen buddies",
+        "description" : "Assembled from a set of instructions you found in an old book of DIY projects, the *FOODCO kitchen buddy* claims to be *the perfect solution to all your home-cooking needs!*.  While it is surprisingly handy for vacuum-sealing as well as dehydrating food, the cheery sales pitch neglected to mention A - how awkward the damn thing is, B - That you still need a normal kitchen and C - how it doesn't take batteries.  You're going to have to weld it to a vehicle, or something else with a supply of electricity, if you want to use it.  In addition to the food preservation features, it also has a water-purification system, a drawer for holding extra tools, and for some insane reason, a press and die set for hand-loading ammunition.",
         "weight" : 27976,
         "to_hit" : -2,
         "color" : "light_green",
         "symbol" : "&",
-        "material" : ["steel", "null"],
+        "material" : ["steel", "plastic"],
         "volume" : 111,
         "bashing" : 0,
         "cutting" : 0,
         "category" : "veh_parts",
-        "price" : 400
+        "price" : 40000
     },
     {
         "type":"GENERIC",
         "id" : "chemlab",
         "name" : "onboard chemistry lab",
-        "description" : "Assembled from a chemistry set attached to a complex wiring harness, it is well suited to most any chemistry project you could imagine. Unable to utilize standard batteries, it requires an external supply of electricity to operate.",
+        "description" : "Assembled from a chemistry set attached to a complex wiring harness, it is well suited to most any chemistry project you could imagine.  Unable to utilize standard batteries, it requires an external supply of electricity to operate.",
         "weight" : 19124,
         "to_hit" : -2,
         "color" : "yellow",
         "symbol" : "&",
-        "material" : ["steel", "glass"],
+        "material" : ["iron", "glass"],
         "volume" : 92,
         "bashing" : 0,
         "cutting" : 0,
-        "price" : 400
+        "category" : "veh_parts",
+        "price" : 40000
     },
     {
         "type":"GENERIC",
@@ -626,44 +764,46 @@
         "to_hit": 0,
         "color": "red",
         "symbol": ";",
-        "material": ["plastic", "iron"],
+        "material": ["plastic", "aluminum"],
         "volume": 2,
         "bashing": 1,
         "cutting": 0,
         "category" : "veh_parts",
-        "price": 800
+        "price": 80000
     },
     {
         "type":"GENERIC",
         "id": "light_emergency_red",
         "name": "emergency vehicle light (red)",
-        "description": "One of the red-colored lights from the top of an emergency services vehicle. When turned on, the lights rotate to shine in all directions.",
+        "name_plural": "emergency vehicle lights (red)",
+        "description": "One of the red-colored lights from the top of an emergency services vehicle.  When turned on, the lights rotate to shine in all directions.",
         "weight": 500,
         "to_hit": 1,
         "color": "red",
         "symbol": ";",
-        "material": ["plastic", "iron"],
+        "material": ["plastic", "steel"],
         "volume": 4,
         "bashing": 1,
         "cutting": 0,
         "category" : "veh_parts",
-        "price": 400
+        "price": 40000
     },
     {
         "type":"GENERIC",
         "id": "light_emergency_blue",
         "name": "emergency vehicle light (blue)",
-        "description": "One of the blue-colored lights from the top of an emergency services vehicle. When turned on, the lights rotate to shine in all directions.",
+        "name_plural": "emergency vehicle lights (blue)",
+        "description": "One of the blue-colored lights from the top of an emergency services vehicle.  When turned on, the lights rotate to shine in all directions.",
         "weight": 500,
         "to_hit": 1,
         "color": "blue",
         "symbol": ";",
-        "material": ["plastic", "iron"],
+        "material": ["plastic", "steel"],
         "volume": 4,
         "bashing": 1,
         "cutting": 0,
         "category" : "veh_parts",
-        "price": 400
+        "price": 40000
     },
     {
         "type":"GENERIC",
@@ -678,7 +818,8 @@
         "volume" : 200,
         "bashing" : 2,
         "cutting" : 0,
-        "price" : 400
+        "category" : "veh_parts",
+        "price" : 40000
     },
     {
         "type":"GENERIC",
@@ -689,18 +830,18 @@
         "to_hit": 1,
         "color": "white",
         "symbol": ";",
-        "material": ["iron", "plastic"],
+        "material": ["plastic", "steel"],
         "volume": 8,
         "bashing": 5,
         "cutting": 0,
         "category" : "veh_parts",
-        "price": 900
+        "price": 90000
     },
     {
         "type":"GENERIC",
         "id": "recharge_station",
         "name": "recharging station",
-        "description": "An induction based charging system designed to operate on vehicle power. Once installed in a vehicle storage space, it will slowly charge all tools with rechargeable batteries in that space. The system can only be installed in existing storage compartments.",
+        "description": "An induction based charging system designed to operate on vehicle power.  Once installed in a vehicle storage space, it will slowly charge all tools with rechargeable batteries in that space.  The system can only be installed in existing storage compartments.",
         "weight": 2500,
         "to_hit": 1,
         "color": "light_blue",
@@ -710,6 +851,21 @@
         "bashing": 5,
         "cutting": 0,
         "category" : "veh_parts",
-        "price": 900
+        "price": 90000
+    },
+    {
+        "type":"GENERIC",
+        "id" : "stereo",
+        "name" : "stereo system",
+        "description" : "A stereo system with speakers.  It is capable of being hooked up to a vehicle to play music from a CD.",
+        "weight" : 800,
+        "to_hit" : -2,
+        "color" : "red",
+        "symbol" : "&",
+        "material" : ["steel", "null"],
+        "volume" : 14,
+        "bashing" : 0,
+        "cutting" : 0,
+        "price" : 800
     }
 ]

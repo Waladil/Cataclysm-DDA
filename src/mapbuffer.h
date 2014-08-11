@@ -1,74 +1,90 @@
-#include "map.h"
 #include "line.h"
 #include <map>
 #include <list>
+#include <memory>
 
-class game;
-
-struct pointcomp
-{
- bool operator() (const tripoint &lhs, const tripoint &rhs) const
- {
-  if (lhs.x < rhs.x) return true;
-  if (lhs.x > rhs.x) return false;
-  if (lhs.y < rhs.y) return true;
-  if (lhs.y > rhs.y) return false;
-  if (lhs.z < rhs.z) return true;
-  if (lhs.z > rhs.z) return false;
-  return false;
- };
+struct pointcomp {
+    bool operator() (const tripoint &lhs, const tripoint &rhs) const
+    {
+        if (lhs.x < rhs.x) {
+            return true;
+        }
+        if (lhs.x > rhs.x) {
+            return false;
+        }
+        if (lhs.y < rhs.y) {
+            return true;
+        }
+        if (lhs.y > rhs.y) {
+            return false;
+        }
+        if (lhs.z < rhs.z) {
+            return true;
+        }
+        if (lhs.z > rhs.z) {
+            return false;
+        }
+        return false;
+    };
 };
+
+struct submap;
 
 /**
  * Store, buffer, save and load the entire world map.
  */
 class mapbuffer
 {
- public:
-  mapbuffer();
-  ~mapbuffer();
+    public:
+        mapbuffer();
+        ~mapbuffer();
 
-  /** Tells the mapbuffer that there is some unsaved change.
-   *
-   *  The next time save_if_dirty is called, the mapbuffer will be saved.
-   */
-  void set_dirty();
+        /** Load the entire world from savefiles into submaps in this instance. **/
+        void load(std::string worldname);
+        /** Store all submaps in this instance into savefiles.
+         * @ref delete_after_save If true, the saved submaps are removed
+         * from the mapbuffer (and deleted).
+         **/
+        void save( bool delete_after_save = false );
 
-  /** Clears the dirty flag. **/
-  void make_volatile();
+        /** Delete all buffered submaps. **/
+        void reset();
 
-  /** Load the entire world from savefiles into submaps in this instance. **/
-  void load(std::string worldname);
-  void unserialize(std::ifstream & fin);
-  bool unserialize_legacy(std::ifstream & fin);
-  /** Store all submaps in this instance into savefiles. **/
-  void save();
+        /** Add a new submap to the buffer.
+         *
+         * @param x, y, z The absolute world position in submap coordinates.
+         * Same as the ones in @ref lookup_submap.
+         * @param sm The submap. If the submap has been added, the unique_ptr
+         * is released (set to NULL).
+         * @return true if the submap has been stored here. False if there
+         * is already a submap with the specified coordinates. The submap
+         * is not stored than and the caller must take of the submap object
+         * on their own (and properly delete it).
+         */
+        bool add_submap(int x, int y, int z, std::unique_ptr<submap> &sm);
+        bool add_submap(const tripoint &p, std::unique_ptr<submap> &sm);
+        bool add_submap(int x, int y, int z, submap *sm);
+        bool add_submap(const tripoint &p, submap *sm);
 
-  /** Save only if the dirty flag is set. **/
-  void save_if_dirty();
+        /** Get a submap stored in this buffer.
+         *
+         * @param x, y, z The absolute world position in submap coordinates.
+         * Same as the ones in @ref add_submap.
+         * @param return NULL if the submap is not in the mapbuffer
+         * and could not be loaded. The mapbuffer takes care of the returned
+         * submap object, don't delete it on your own.
+         */
+        submap *lookup_submap(int x, int y, int z);
 
-  /** Delete all buffered submaps. **/
-  void reset();
-
-  /** Add a new submap to the buffer.
-   *
-   * @param x, y, z The absolute world position in submap coordinates.
-   */
-  bool add_submap(int x, int y, int z, submap *sm);
-
-  /** Get a submap stored in this buffer.
-   *
-   * @param x, y, z The absolute world position in submap coordinates.
-   */
-  submap* lookup_submap(int x, int y, int z);
-
-  /** Returns the amount of buffered submaps. **/
-  int size();
-
- private:
-  std::map<tripoint, submap*, pointcomp> submaps;
-  std::list<submap*> submap_list;
-  bool dirty;
+    private:
+        typedef std::map<tripoint, submap *, pointcomp> submap_map_t;
+        // There's a very good reason this is private,
+        // if not handled carefully, this can erase in-use submaps and crash the game.
+        void remove_submap( tripoint addr );
+        submap *unserialize_submaps( const tripoint &p );
+        void save_quad( const std::string &filename, const tripoint &om_addr,
+                        std::list<tripoint> &submaps_to_delete, bool delete_after_save );
+        submap_map_t submaps;
 };
 
 extern mapbuffer MAPBUFFER;

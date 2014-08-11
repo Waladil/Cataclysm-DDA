@@ -15,14 +15,16 @@ class sokoban_game
                 int iOldX;
                 std::string sTileOld;
 
-                cUndo() {
+                cUndo()
+                {
                     iOldY = 0;
                     iOldX = 0;
 
                     sTileOld = " ";
                 }
 
-                cUndo(const int arg_y, const int arg_x, const std::string arg_tile) {
+                cUndo(const int arg_y, const int arg_x, const std::string arg_tile)
+                {
                     iOldY = arg_y;
                     iOldX = arg_x;
                     sTileOld = arg_tile;
@@ -33,7 +35,7 @@ class sokoban_game
 
         int iCurrentLevel, iNumLevel, iTotalMoves;
         std::map<int, std::map<int, std::string> > mLevel;
-        std::map<int, std::map<std::string, int> > mLevelInfo;
+        std::map<int, std::map<std::string, size_t> > mLevelInfo;
         std::vector<std::map<int, std::map<int, std::string> > > vLevel;
         std::vector<cUndo> vUndo;
         std::vector<std::vector<std::pair<int, int> > > vLevelDone;

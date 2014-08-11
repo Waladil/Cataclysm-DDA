@@ -3,6 +3,7 @@ cataclysm-tiles
 chkjson
 !src/chkjson
 data/*.template
+templates/
 save/
 graveyard/
 memorial/
@@ -13,14 +14,23 @@ bindist/
 cataclysmdda-*
 objwin/
 src/version.h
-lua/catabindings.cpp
+src/lua/catabindings.cpp
 CataclysmWin.cscope_file_list
 CataclysmWin.depend
 CataclysmWin.layout
 *.exe
 *.dll
 WinDepend/
-data/FONTDATA
+*.7z
+*.zip
+
+data/font/
+config/
+
+doxygen_doc/html/*
+doxygen_doc/latex/*
+
+data/mods/user-default-mods.json
 
 # Visual Studio files
 *.suo
@@ -30,6 +40,8 @@ data/FONTDATA
 Release*/
 Debug*/
 *.opensdf
+*.user
+*.vcxproj.filters
 
 # Temporary and backup files
 *~
@@ -48,3 +60,7 @@ cscope.*
 
 # Compiled binary translations
 lang/mo/
+
+# Netbeans IDE folders
+nbproject/
+

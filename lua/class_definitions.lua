@@ -5,13 +5,15 @@ classes = {
         attributes = {
             posx = {
                 type = "int",
-                writable = false
+                writable = false,
+                desc = "The x position of the player in the reality bubble."
             },
             posy = {
                 type = "int",
-                writable = false
+                writable = false,
+                desc = "The y position of the player in the reality bubble."
             },
-        
+
             hunger = {
                 type = "int",
                 writable = true
@@ -24,53 +26,49 @@ classes = {
                 type = "int",
                 writable = true
             },
-            health = {
-                type = "int",
-                writable = false
-            },
-            
+
             name = {
                 type = "string",
                 writable = false
             },
-            
+
             male = {
                 type = "bool",
                 writable = false
             },
-            
+
             str_cur = {
                 type = "int",
-                writable = false
+                writable = true
             },
             dex_cur = {
                 type = "int",
-                writable = false
+                writable = true
             },
             int_cur = {
                 type = "int",
-                writable = false
+                writable = true
             },
             per_cur = {
                 type = "int",
-                writable = false
+                writable = true
             },
-            
+
             str_max = {
                 type = "int",
-                writable = false
+                writable = true
             },
             dex_max = {
                 type = "int",
-                writable = false
+                writable = true
             },
             int_max = {
                 type = "int",
-                writable = false
+                writable = true
             },
             per_max = {
                 type = "int",
-                writable = false
+                writable = true
             },
 
             stim = {
@@ -98,6 +96,22 @@ classes = {
             is_npc = {
                 args = {},
                 rval = "bool"
+            },
+            weight_carried = {
+                args = {},
+                rval = "int"
+            },
+            weight_capacity = {
+                args = {},
+                rval = "int"
+            },
+            volume_carried = {
+                args = {},
+                rval = "int"
+            },
+            volume_capacity = {
+                args = {},
+                rval = "int"
             }
         }
     },
@@ -243,7 +257,19 @@ classes = {
         functions = {
         }
     },
+    Creature = {
+        attributes = {
+
+        },
+        functions = {
+            get_speed = {
+                args = {},
+                rval = "int"
+            }
+        }
+    },
     monster = {
+        parent = "Creature",
         attributes = {
             hp = {
                 type = "int",
@@ -280,20 +306,451 @@ classes = {
                 rval = "int"
             }
         }
+    },
+    mtype = {
+        attributes = {
+            speed = {
+                type = "int",
+                writable = true
+            },
+            melee_skill = {
+                type = "int",
+                writable = true
+            },
+            melee_dice = {
+                type = "int",
+                writable = true
+            },
+            melee_sides = {
+                type = "int",
+                writable = true
+            },
+            melee_cut = {
+                type = "int",
+                writable = true
+            },
+            sk_dodge = {
+                type = "int",
+                writable = true
+            },
+            armor_bash = {
+                type = "int",
+                writable = true
+            },
+            armor_cut = {
+                type = "int",
+                writable = true
+            },
+            sk_dodge = {
+                type = "int",
+                writable = true
+            },
+            difficulty = {
+                type = "int",
+                writable = true
+            },
+            agro = {
+                type = "int",
+                writable = true
+            },
+            morale = {
+                type = "int",
+                writable = true
+            },
+        },
+        functions = {
+            in_category = {
+                args = {"string"},
+                rval = "bool"
+            },
+            in_species = {
+                args = {"string"},
+                rval = "bool"
+            },
+	    has_flag = {
+	        args = {"string"},
+		rval = "bool"
+	    },
+	    set_flag = {
+	        args = {"string", "bool"},
+		rval = nil
+	    }
+        }
+    },
+    mongroup = {
+        attributes = {
+            type = {
+                type = "string",
+                writable = true
+            },
+            posx = {
+                type = "int",
+                writable = true
+            },
+            posy = {
+                type = "int",
+                writable = true
+            },
+            posz = {
+                type = "int",
+                writable = true
+            },
+            tx = {
+                type = "int",
+                writable = false
+            },
+            ty = {
+                type = "int",
+                writable = false
+            },
+            dying = {
+                type = "bool",
+                writable = true
+            },
+            horde = {
+                type = "bool",
+                writable = true
+            },
+            diffuse = {
+                type = "bool",
+                writable = true
+            },
+            radius = {
+                type = "int",
+                writable = true
+            },
+            population = {
+                type = "int",
+                writable = true
+            }
+        },
+        functions = {
+            set_target = {
+                args = {"int", "int"},
+                rval = nil
+            },
+            inc_interest = {
+                args = {"int"},
+                rval = nil
+            },
+            dec_interest = {
+                args = {"int"},
+                rval = nil
+            },
+            set_interest = {
+                args = {"int"},
+                rval = nil
+            }
+        }
+    },
+    overmap = {
+        attributes = {
+        },
+        functions = {
+            get_bottom_border = {
+                args = {},
+                rval = "int"
+            },
+            get_top_border = {
+                args = {},
+                rval = "int"
+            },
+            get_left_border = {
+                args = {},
+                rval = "int"
+            },
+            get_right_border = {
+                args = {},
+                rval = "int"
+            },
+        }
+    },
+    itype = {
+        attributes = {
+            id = {
+                type = "string",
+                writable = false,
+                desc = "The unique string identifier of the item type, as defined in the JSON."
+            },
+            description = {
+                type = "string",
+                writable = true
+            },
+            material1 = {
+                type = "string",
+                cpp_name = "m1",
+                writable = true
+            },
+            material2 = {
+                type = "string",
+                cpp_name = "m2",
+                writable = true
+            },
+            volume = {
+                type = "int",
+                writable = true
+            },
+            stack_size = {
+                type = "int",
+                writable = true
+            },
+            weight = {
+                type = "int",
+                writable = true
+            },
+            bashing = {
+                type = "int",
+                cpp_name = "melee_dam",
+                writable = true
+            },
+            cutting = {
+                type = "int",
+                cpp_name = "melee_cut",
+                writable = true
+            },
+            to_hit = {
+                type = "int",
+                cpp_name = "m_to_hit",
+                writable = true
+            },
+            price = {
+                type = "int",
+                writable = true
+            }
+        },
+        functions = {
+            nname = {
+                args = { "int" },
+                argnames = { "quantity" },
+                rval = "string",
+                desc = "Get a translated name for the item with the given quantity."
+            }
+        }
+    },
+    it_comest = {
+        parent = "itype",
+        attributes = {
+            quench = {
+                type = "int",
+                writable = true
+            },
+            nutrition = {
+                type = "int",
+                cpp_name = "nutr",
+                writable = true
+            },
+            spoils_in = {
+                type = "int",
+                cpp_name = "spoils",
+                writable = true
+            },
+            addiction_potential = {
+                type = "int",
+                cpp_name = "addict",
+                writable = true
+            },
+            charges = {
+                type = "int",
+                writable = true
+            },
+            stim = {
+                type = "int",
+                writable = true
+            },
+            healthy = {
+                type = "int",
+                writable = true
+            },
+            brewtime = {
+                type = "int",
+                writable = true
+            },
+            fun = {
+                type = "int",
+                writable = true
+            },
+            container = {
+                type = "string",
+                writable = true
+            },
+            tool = {
+                type = "string",
+                writable = true
+            },
+            comestible_type = {
+                type = "string",
+                cpp_name = "comesttype",
+                writable = true
+            }
+        },
+        functions = {
+        }
+    },
+    it_gun = {
+        parent = "itype",
+        attributes = {
+            ammo = {
+                type = "string",
+                writable = true
+            },
+            ranged_damage = {
+                type = "int",
+                cpp_name = "dmg_bonus",
+                writable = true
+            },
+            pierce = {
+                type = "int",
+                writable = true
+            },
+            range = {
+                type = "int",
+                writable = true
+            },
+            dispersion = {
+                type = "int",
+                writable = true
+            },
+            recoil = {
+                type = "int",
+                writable = true
+            },
+            durability = {
+                type = "int",
+                writable = true
+            },
+            burst = {
+                type = "int",
+                writable = true
+            },
+            clip = {
+                type = "int",
+                writable = true
+            },
+            reload = {
+                type = "int",
+                cpp_name = "reload_time",
+                writable = true
+            }
+        },
+        functions = {
+        }
+    },
+    it_gunmod = {
+        parent = "itype",
+        attributes = {
+            dispersion = {
+                type = "int",
+                writable = true
+            },
+            damage = {
+                type = "int",
+                writable = true
+            },
+            loudness = {
+                type = "int",
+                writable = true
+            },
+            clip = {
+                type = "int",
+                writable = true
+            },
+            recoil = {
+                type = "int",
+                writable = true
+            },
+            burst = {
+                type = "int",
+                writable = true
+            },
+            newtype = {
+                type = "string",
+                writable = true
+            },
+            location = {
+                type = "string",
+                writable = true
+            }
+        },
+        functions = {
+        }
+    },
+    it_tool = {
+        parent = "itype",
+        attributes = {
+            ammo = {
+                type = "string",
+                writable = true
+            },
+            max_charges = {
+                type = "int",
+                writable = true
+            },
+            def_charges = {
+                type = "int",
+                writable = true
+            },
+            charges_per_use = {
+                type = "int",
+                writable = true
+            },
+            turns_per_charge = {
+                type = "int",
+                writable = true
+            }
+        },
+        functions = {
+        }
+    },
+    it_armor = {
+        parent = "itype",
+        attributes = {
+            encumberance = {
+                type = "int",
+                cpp_name = "encumber",
+                writable = true
+            },
+            coverage = {
+                type = "int",
+                writable = true
+            },
+            material_thickness = {
+                type = "int",
+                cpp_name = "thickness",
+                writable = true
+            },
+            envirnomental_protection = {
+                type = "int",
+                cpp_name = "env_resist",
+                writable = true
+            },
+            warmth = {
+                type = "int",
+                writable = true
+            },
+            storage = {
+                type = "int",
+                writable = true
+            }
+        },
+        functions = {
+        }
     }
-        
 }
 
 global_functions = {
     add_msg = {
-        cpp_name = "g->add_msg",
-        args = { "cstring" },
-        rval = nil
+        cpp_name = "add_msg",
+        args     = { "cstring" },
+        argnames = { "message" },
+        rval = nil,
+        desc = "Write a message to the game's standard message window."
     },
     revive_corpse = {
         cpp_name = "g->revive_corpse",
-        args = { "int", "int", "int" },
-        rval = nil
+        args     = { "int", "int", "int" },
+        argnames = { "x", "y", "index" },
+        rval = nil,
+        desc = "Revive the corpse at the specified location. The index parameter specifies the index within the item stack that the corpse is located at."
     },
     popup = {
         cpp_name = "popup",
@@ -339,5 +796,55 @@ global_functions = {
         cpp_name = "game_remove_item",
         args = {"int", "int", "item"},
         rval = nil
+    },
+    get_current_overmap = {
+        cpp_name = "get_current_overmap",
+        args = { },
+        rval = "overmap"
+    },
+    add_item_to_group = {
+        cpp_name = "item_controller->add_item_to_group",
+        args = { "string", "string", "int" },
+        rval = "bool"
+    },
+    get_comestible_type = {
+        cpp_name = "get_comestible_type",
+        args = { "string" },
+        rval = "it_comest"
+    },
+    get_gun_type = {
+        cpp_name = "get_gun_type",
+        args = { "string" },
+        rval = "it_gun"
+    },
+    get_gunmod_type = {
+        cpp_name = "get_gunmod_type",
+        args = { "string" },
+        rval = "it_gunmod"
+    },
+    get_tool_type = {
+        cpp_name = "get_tool_type",
+        args = { "string" },
+        rval = "it_tool"
+    },
+    get_armor_type = {
+        cpp_name = "get_armor_type",
+        args = { "string" },
+        rval = "it_armor"
+    },
+    create_monster = {
+        cpp_name = "create_monster",
+        args = { "string", "int", "int" },
+        argnames = { "monster_type", "x", "y" },
+        rval = "monster",
+        desc = "Spawns a monster of the given type at the given location within the current reality bubble. Returns nil if something is blocking that location."
+    },
+    is_empty = {
+        cpp_name = "g->is_empty",
+        args = { "int", "int" },
+        argnames = { "x", "y" },
+        rval = "bool",
+        desc = "Check if the given location in the current reality bubble is empty."
     }
+
 }

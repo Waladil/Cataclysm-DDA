@@ -35,6 +35,7 @@ enum vpart_bitflags {
     VPFLAG_SEATBELT,
     VPFLAG_WHEEL,
     VPFLAG_MOUNTABLE,
+    VPFLAG_FLOATS,
 
     VPFLAG_ALTERNATOR,
     VPFLAG_ENGINE,
@@ -49,6 +50,7 @@ enum vpart_bitflags {
     VPFLAG_VARIABLE_SIZE,
     VPFLAG_TRACK,
     VPFLAG_RECHARGE,
+    VPFLAG_MIRROR
 
 };
 /* Flag info:
@@ -58,8 +60,7 @@ enum vpart_bitflags {
  * VARIABLE_SIZE - Has 'bigness' for power, wheel radius, etc
  * MOUNTABLE - Usable as a point to fire a mountable weapon from.
  * Other flags are self-explanatory in their names. */
-struct vpart_info
-{
+struct vpart_info {
     std::string id;         // unique identifier for this part
     int loadid;             // # of loaded order, non-saved runtime optimization
     std::string name;       // part name, user-visible
@@ -71,8 +72,7 @@ struct vpart_info
     int durability;         // durability
     int power;              // engine (top spd), solar panel/powered component (% of 1 fuel per turn, can be > 100)
     int epower;             // electrical power in watts (positive values for generation, negative for consumption)
-    union
-    {
+    union {
         int par1;
         int size;       // fuel tank, trunk
         int wheel_width;// wheel width in inches. car could be 9, bicycle could be 2.
@@ -87,11 +87,14 @@ struct vpart_info
     unsigned long bitflags; // flags checked so often that things slow down due to string cmp
 
     int z_order;        // z-ordering, inferred from location, cached here
+    int list_order;     // Display order in vehicle interact display
 
-    bool has_flag(const std::string & flag) const {
+    bool has_flag(const std::string &flag) const
+    {
         return flags.count(flag) != 0;
     }
-    bool has_flag(const vpart_bitflags flag) const {
+    bool has_flag(const vpart_bitflags flag) const
+    {
         return (bitflags & mfb(flag));
     }
 };

@@ -17,6 +17,11 @@ void damage_instance::add_damage(damage_type dt, float a, int rp, float rm)
     damage_unit du(dt, a, rp, rm);
     damage_units.push_back(du);
 }
+void damage_instance::add_effect( std::string effect )
+{
+    effects.insert( effect );
+}
+
 void damage_instance::mult_damage(double multiplier)
 {
     for (std::vector<damage_unit>::iterator it = damage_units.begin();
@@ -35,6 +40,7 @@ float damage_instance::type_damage(damage_type dt) const
     }
     return ret;
 }
+//This returns the damage from this damage_instance. The damage done to the target will be reduced by their armor.
 float damage_instance::total_damage() const
 {
     float ret = 0;
@@ -126,10 +132,10 @@ void ammo_effects(int x, int y, const std::set<std::string> &effects)
     }
 
     if (effects.count("MININUKE_MOD")) {
-        g->explosion(x, y, 200, 0, false);
+        g->explosion(x, y, 300, 0, false);
         int junk;
-        for (int i = -4; i <= 4; i++) {
-            for (int j = -4; j <= 4; j++) {
+        for (int i = -6; i <= 6; i++) {
+            for (int j = -6; j <= 6; j++) {
                 if (g->m.sees(x, y, x + i, y + j, 3, junk) &&
                     g->m.move_cost(x + i, y + j) > 0) {
                     g->m.add_field(x + i, y + j, fd_nuke_gas, 3);

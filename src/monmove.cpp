@@ -6,6 +6,7 @@
 #include "line.h"
 #include "rng.h"
 #include "pldata.h"
+#include "messages.h"
 #include <stdlib.h>
 #include "cursesdef.h"
 
@@ -23,17 +24,12 @@
 
 #define MONSTER_FOLLOW_DIST 8
 
-void monster::receive_moves()
-{
- moves += speed;
-}
-
 bool monster::wander()
 {
  return (plans.empty());
 }
 
-bool monster::can_move_to(int x, int y)
+bool monster::can_move_to(int x, int y) const
 {
     if (g->m.move_cost(x, y) == 0 &&
      (!has_flag(MF_DESTROYS) || !g->m.is_destructable(x, y))) {
@@ -48,7 +44,7 @@ bool monster::can_move_to(int x, int y)
     if (has_flag(MF_AQUATIC) && !g->m.has_flag("SWIMMABLE", x, y)) {
         return false;
     }
-    
+
     if (has_flag(MF_SUNDEATH) && g->is_in_sunlight(x, y)) {
         return false;
     }
@@ -79,7 +75,7 @@ bool monster::can_move_to(int x, int y)
 }
 
 // Resets plans (list of squares to visit) and builds it as a straight line
-// to the destination (x,y). t is used to choose which eligable line to use.
+// to the destination (x,y). t is used to choose which eligible line to use.
 // Currently, this assumes we can see (x,y), so shouldn't be used in any other
 // circumstance (or else the monster will "phase" through solid terrain!)
 void monster::set_dest(int x, int y, int &t)
@@ -128,7 +124,7 @@ void monster::plan(const std::vector<int> &friendlies)
         } else if (friendly > 0 && one_in(3)) {
             // Grow restless with no targets
             friendly--;
-        } else if (friendly < 0 &&  sees_player( tc ) ) { 
+        } else if (friendly < 0 &&  sees_player( tc ) ) {
             if (rl_dist(posx(), posy(), g->u.posx, g->u.posy) > 2) {
                 set_dest(g->u.posx, g->u.posy, tc);
             } else {
@@ -139,7 +135,7 @@ void monster::plan(const std::vector<int> &friendlies)
     }
 
     // If we can see, and we can see a character, move toward them or flee.
-    if (can_see() && sees_player( tc ) ) { 
+    if (can_see() && sees_player( tc ) ) {
         dist = rl_dist(posx(), posy(), g->u.posx, g->u.posy);
         if (is_fleeing(g->u)) {
             // Wander away.
@@ -198,11 +194,11 @@ void monster::plan(const std::vector<int> &friendlies)
                 --stc;
             }
             set_dest(g->u.posx, g->u.posy, stc);
-        }
-        else if (closest <= -3)
+        } else if (closest <= -3) {
             set_dest(g->zombie(-3 - closest).posx(), g->zombie(-3 - closest).posy(), stc);
-        else if (closest >= 0)
+        } else if (closest >= 0) {
             set_dest(g->active_npc[closest]->posx, g->active_npc[closest]->posy, stc);
+        }
     }
 }
 
@@ -222,7 +218,7 @@ void monster::move()
 
     //Hallucinations have a chance of disappearing each turn
     if (is_hallucination() && one_in(25)) {
-        die();
+        die( nullptr );
         return;
     }
 
@@ -234,7 +230,7 @@ void monster::move()
     if (has_flag(MF_REGENERATES_50)) {
         if (hp < type->hp) {
             if (one_in(2)) {
-                g->add_msg(_("The %s is visibly regenerating!"), name().c_str());
+                add_msg(m_warning, _("The %s is visibly regenerating!"), name().c_str());
             }
             hp += 50;
             if(hp > type->hp) {
@@ -245,7 +241,7 @@ void monster::move()
     if (has_flag(MF_REGENERATES_10)) {
         if (hp < type->hp) {
             if (one_in(2)) {
-                g->add_msg(_("The %s seems a little healthier."), name().c_str());
+                add_msg(m_warning, _("The %s seems a little healthier."), name().c_str());
             }
             hp += 10;
             if(hp > type->hp) {
@@ -253,17 +249,48 @@ void monster::move()
             }
         }
     }
-    
+
+    //The monster can consume objects it stands on. Check if there are any.
+    //If there are. Consume them.
+    if (has_flag(MF_ABSORBS)) {
+        if(!g->m.i_at(posx(), posy()).empty()) {
+            add_msg(_("The %s flows around the objects on the floor and they are quickly dissolved!"), name().c_str());
+            std::vector<item> items_absorbed = g->m.i_at(posx(), posy());
+            for( size_t i = 0; i < items_absorbed.size(); ++i ) {
+                hp += items_absorbed.at(i).volume(); //Yeah this means it can get more HP than normal.
+            }
+            g->m.i_clear(posx(), posy());
+        }
+    }
+
+    //Monster will regen morale and aggression if it is on max HP
+    //It regens more morale and aggression if is currently fleeing.
+    if(has_flag(MF_REGENMORALE) && hp >= type->hp){
+        if(is_fleeing(g->u)){
+            morale = type->morale;
+            anger = type->agro;
+        }
+        if(morale <= type->morale)
+            morale += 1;
+        if(anger <= type->agro)
+            anger += 1;
+        if(morale < 0)
+            morale += 5;
+        if(anger < 0)
+            anger += 5;
+    }
+
     // If this critter dies in sunlight, check & assess damage.
     if (g->is_in_sunlight(posx(), posy()) && has_flag(MF_SUNDEATH)) {
-        g->add_msg(_("The %s burns horribly in the sunlight!"), name().c_str());
+        add_msg(_("The %s burns horribly in the sunlight!"), name().c_str());
         hp -= 100;
         if(hp < 0) {
             hp = 0  ;
         }
     }
 
-    if (sp_timeout == 0 && (friendly == 0 || has_flag(MF_FRIENDLY_SPECIAL))) {
+    if( sp_timeout == 0 && (friendly == 0 || has_flag(MF_FRIENDLY_SPECIAL)) &&
+        !has_effect("pacified") ) {
         mattack ma;
         if(!is_hallucination()) {
             (ma.*type->sp_attack)(this);
@@ -301,14 +328,14 @@ void monster::move()
 
     bool moved = false;
     point next;
-    int mondex = (plans.size() > 0 ? g->mon_at(plans[0].x, plans[0].y) : -1);
+    int mondex = (!plans.empty() ? g->mon_at(plans[0].x, plans[0].y) : -1);
 
     monster_attitude current_attitude = attitude();
     if (friendly == 0) {
         current_attitude = attitude(&(g->u));
     }
     // If our plans end in a player, set our attitude to consider that player
-    if (plans.size() > 0) {
+    if (!plans.empty()) {
         if (plans.back().x == g->u.posx && plans.back().y == g->u.posy) {
             current_attitude = attitude(&(g->u));
         } else {
@@ -328,9 +355,9 @@ void monster::move()
         return;
     }
 
-    if (plans.size() > 0 &&
-         (mondex == -1 || g->zombie(mondex).friendly != 0 || has_flag(MF_ATTACKMON)) &&
-         (can_move_to(plans[0].x, plans[0].y) ||
+    if (!plans.empty() &&
+        (mondex == -1 || g->zombie(mondex).friendly != 0 || has_flag(MF_ATTACKMON)) &&
+        (can_move_to(plans[0].x, plans[0].y) ||
          (plans[0].x == g->u.posx && plans[0].y == g->u.posy) ||
          (g->m.has_flag("BASHABLE", plans[0].x, plans[0].y) && has_flag(MF_BASHES)))){
         // CONCRETE PLANS - Most likely based on sight
@@ -369,7 +396,7 @@ void monster::move()
     }
 
     // If we're close to our target, we get focused and don't stumble
-    if ((has_flag(MF_STUMBLES) && (plans.size() > 3 || plans.size() == 0)) ||
+    if ((has_flag(MF_STUMBLES) && (plans.size() > 3 || plans.empty())) ||
           !moved) {
         stumble(moved);
     }
@@ -416,8 +443,8 @@ void monster::friendly_move()
 {
     point next;
     bool moved = false;
-    //If we sucessfully calculated a plan in the generic monster movement function, begin executing it.
-    if (plans.size() > 0 && (plans[0].x != g->u.posx || plans[0].y != g->u.posy) &&
+    //If we successfully calculated a plan in the generic monster movement function, begin executing it.
+    if (!plans.empty() && (plans[0].x != g->u.posx || plans[0].y != g->u.posy) &&
             (can_move_to(plans[0].x, plans[0].y) ||
              (g->m.has_flag("BASHABLE", plans[0].x, plans[0].y) && has_flag(MF_BASHES)))) {
         next = plans[0];
@@ -484,7 +511,7 @@ point monster::scent_move()
    }
   }
  }
- if (smoves.size() > 0) {
+ if (!smoves.empty()) {
   int nextsq = rng(0, smoves.size() - 1);
   next = smoves[nextsq];
  }
@@ -553,7 +580,7 @@ point monster::wander_next()
  return next;
 }
 
-int monster::calc_movecost(int x1, int y1, int x2, int y2)
+int monster::calc_movecost(int x1, int y1, int x2, int y2) const
 {
     int movecost = 0;
     float diag_mult = (trigdist && x1 != x2 && y1 != y2) ? 1.41 : 1;
@@ -619,7 +646,7 @@ std::vector<point> get_bashing_zone( point bashee, point basher, int maxdepth ) 
                    blocked[offside] = true;
                 }
                 if ( blocked[offside] == false ) { // mobs behind walls are not helpful
-                   // g->add_msg("bzone += %d,%d",hpos.x,hpos.y);
+                   // add_msg("bzone += %d,%d",hpos.x,hpos.y);
                    ret.push_back( hpos );
                 }
              }
@@ -630,14 +657,16 @@ std::vector<point> get_bashing_zone( point bashee, point basher, int maxdepth ) 
 }
 
 int monster::bash_at(int x, int y) {
+
+    if (has_effect("pacified")) return 0;
+
     //Hallucinations can't bash stuff.
     if(is_hallucination()) {
-      return 0;
+        return 0;
     }
     bool try_bash = !can_move_to(x, y) || one_in(3);
     bool can_bash = g->m.has_flag("BASHABLE", x, y) && has_flag(MF_BASHES);
     if(try_bash && can_bash) {
-        std::string bashsound = "NOBASH"; // If we hear "NOBASH" it's time to debug!
         int bashskill = int(type->melee_dice * type->melee_sides);
 
         // pileup = more bashskill, but only help bashing mob directly infront of target
@@ -646,30 +675,31 @@ int monster::bash_at(int x, int y) {
         int diffx = pos().x - x;
         int diffy = pos().y - y;
         int mo_bash = 0;
-        for( int i = 0; i < bzone.size(); i++ ) {
-           if ( g->mon_at( bzone[i] ) != -1 ) {
-              monster & helpermon = g->zombie( g->mon_at( bzone[i] ) );
-              // trying for the same door and can bash; put on helper hat
-              if ( helpermon.wandx == wandx && helpermon.wandy == wandy && helpermon.has_flag(MF_BASHES) ) {
-                 // helpers lined up behind primary basher add full strength, so do those at either shoulder, others add 50%
-                 //addbash *= ( bzone[i].x == pos().x || bzone[i].y == pos().y ? 2 : 1 );
-                 int addbash = int(helpermon.type->melee_dice * helpermon.type->melee_sides);
-                 // helpers lined up behind primary basher add full strength, others 50%
-                 addbash *= ( ( diffx == 0 && bzone[i].x == pos().x ) || ( diffy == 0 && bzone[i].y == pos().y ) ) ? 2 : 1;
-                 mo_bash += addbash;
-                 // g->add_msg("+ bashhelp: %d,%d : +%d = %d", bzone[i].x, bzone[i].y, addbash/2, mo_bash/2 );
-              }
-           }
+        for( size_t i = 0; i < bzone.size(); ++i ) {
+            if ( g->mon_at( bzone[i] ) != -1 ) {
+                monster & helpermon = g->zombie( g->mon_at( bzone[i] ) );
+                // trying for the same door and can bash; put on helper hat
+                if ( helpermon.wandx == wandx && helpermon.wandy == wandy &&
+                     helpermon.has_flag(MF_BASHES) ) {
+                    // helpers lined up behind primary basher add full strength,
+                    // so do those at either shoulder, others add 50%
+                    int addbash = int(helpermon.type->melee_dice * helpermon.type->melee_sides);
+                    // helpers lined up behind primary basher add full strength, others 50%
+                    addbash *= ( ( diffx == 0 && bzone[i].x == pos().x ) ||
+                                 ( diffy == 0 && bzone[i].y == pos().y ) ) ? 2 : 1;
+                    mo_bash += addbash;
+                }
+            }
         }
         // by our powers combined...
         bashskill += int (mo_bash / 2);
 
-        g->m.bash(x, y, bashskill, bashsound);
-        g->sound(x, y, 18, bashsound);
+        g->m.bash( x, y, bashskill );
         moves -= 100;
         return 1;
     } else if (g->m.move_cost(x, y) == 0 && has_flag(MF_DESTROYS)) {
-        g->m.destroy(x, y, true); //todo: add bash info without BASHABLE flag to walls etc, balanced to these guys
+        g->m.destroy(x, y, true);
+        //todo: add bash info without BASHABLE flag to walls etc, balanced to these guys
         moves -= 250;
         return 1;
     }
@@ -677,6 +707,9 @@ int monster::bash_at(int x, int y) {
 }
 
 int monster::attack_at(int x, int y) {
+
+    if (has_effect("pacified")) return 0;
+
     int mondex = g->mon_at(x, y);
     int npcdex = g->npc_at(x, y);
 
@@ -697,7 +730,7 @@ int monster::attack_at(int x, int y) {
 
         // Special case: Target is hallucination
         if(mon.is_hallucination()) {
-            g->kill_mon(mondex);
+            mon.die( nullptr );
 
             // We haven't actually attacked anything, i.e. we can still do things.
             // Hallucinations(obviously) shouldn't affect the way real monsters act.
@@ -714,7 +747,7 @@ int monster::attack_at(int x, int y) {
         is_enemy = is_enemy || has_flag(MF_ATTACKMON); // I guess the flag means all monsters are enemies?
 
         if(is_enemy) {
-            hit_monster(mondex);
+            hit_monster(mon);
             return 1;
         }
     } else if(npcdex != -1  && type->melee_dice > 0) {
@@ -736,12 +769,12 @@ int monster::move_to(int x, int y, bool force)
         return 0;
     }
 
-    if (has_effect("beartrap")) {
+    if (has_effect("beartrap") || has_effect("tied")) {
         moves = 0;
         return 0;
     }
 
-    if (plans.size() > 0) {
+    if (!plans.empty()) {
         plans.erase(plans.begin());
     }
 
@@ -755,11 +788,11 @@ int monster::move_to(int x, int y, bool force)
 
     if(was_water && !will_be_water && g->u_see(x, y)) {
         //Use more dramatic messages for swimming monsters
-        g->add_msg(_("A %s %s from the %s!"), name().c_str(),
+        add_msg(m_warning, _("A %s %s from the %s!"), name().c_str(),
                    has_flag(MF_SWIMS) || has_flag(MF_AQUATIC) ? _("leaps") : _("emerges"),
                    g->m.tername(posx(), posy()).c_str());
     } else if(!was_water && will_be_water && g->u_see(x, y)) {
-        g->add_msg(_("A %s %s into the %s!"), name().c_str(),
+        add_msg(m_warning, _("A %s %s into the %s!"), name().c_str(),
                    has_flag(MF_SWIMS) || has_flag(MF_AQUATIC) ? _("dives") : _("sinks"),
                    g->m.tername(x, y).c_str());
     }
@@ -771,17 +804,16 @@ int monster::move_to(int x, int y, bool force)
         return 1;
     }
     if (type->size != MS_TINY && g->m.has_flag("SHARP", posx(), posy()) && !one_in(4)) {
-        hurt(rng(2, 3));
+        apply_damage( nullptr, bp_torso, rng( 2, 3 ) );
     }
     if (type->size != MS_TINY && g->m.has_flag("ROUGH", posx(), posy()) && one_in(6)) {
-        hurt(rng(1, 2));
+        apply_damage( nullptr, bp_torso, rng( 1, 2 ) );
     }
     if (!digging() && !has_flag(MF_FLIES) &&
           g->m.tr_at(posx(), posy()) != tr_null) { // Monster stepped on a trap!
-        trap* tr = g->traps[g->m.tr_at(posx(), posy())];
-        if (dice(3, type->sk_dodge + 1) < dice(3, tr->avoidance)) {
-            trapfuncm f;
-            (f.*(tr->actm))(this, posx(), posy());
+        trap* tr = traplist[g->m.tr_at(posx(), posy())];
+        if (dice(3, type->sk_dodge + 1) < dice(3, tr->get_avoidance())) {
+            tr->trigger(this, posx(), posy());
         }
     }
     // Diggers turn the dirt into dirtmound
@@ -826,6 +858,11 @@ int monster::move_to(int x, int y, bool force)
             }
         }
     }
+    if (has_flag(MF_LEAKSGAS)){
+        if (one_in(6)){
+        g->m.add_field(posx() + rng(-1,1), posy() + rng(-1, 1), fd_toxic_gas, 3);
+        }
+    }
 
     return 1;
 }
@@ -866,7 +903,7 @@ void monster::stumble(bool moved)
    }
   }
  }
- if (valid_stumbles.size() == 0) //nowhere to stumble?
+ if (valid_stumbles.empty()) //nowhere to stumble?
  {
      return;
  }
@@ -882,7 +919,7 @@ void monster::stumble(bool moved)
  // acquiring a new path to the previous target.
  // target == either end of current plan, or the player.
  int tc;
- if (plans.size() > 0) {
+ if (!plans.empty()) {
   if (g->m.sees(posx(), posy(), plans.back().x, plans.back().y, -1, tc))
    set_dest(plans.back().x, plans.back().y, tc);
   else if (sees_player( tc ))
@@ -912,19 +949,19 @@ void monster::knock_back_from(int x, int y)
  int mondex = g->mon_at(to.x, to.y);
  if (mondex != -1) {
   monster *z = &(g->zombie(mondex));
-  hurt(z->type->size);
+  apply_damage( z, bp_torso, z->type->size );
   add_effect("stunned", 1);
   if (type->size > 1 + z->type->size) {
    z->knock_back_from(posx(), posy()); // Chain reaction!
-   z->hurt(type->size);
+   z->apply_damage( this, bp_torso, type->size );
    z->add_effect("stunned", 1);
   } else if (type->size > z->type->size) {
-   z->hurt(type->size);
+   z->apply_damage( this, bp_torso, type->size );
    z->add_effect("stunned", 1);
   }
 
   if (u_see)
-   g->add_msg(_("The %s bounces off a %s!"), name().c_str(), z->name().c_str());
+   add_msg(_("The %s bounces off a %s!"), name().c_str(), z->name().c_str());
 
   return;
  }
@@ -932,11 +969,11 @@ void monster::knock_back_from(int x, int y)
  int npcdex = g->npc_at(to.x, to.y);
  if (npcdex != -1) {
   npc *p = g->active_npc[npcdex];
-  hurt(3);
+  apply_damage( p, bp_torso, 3 );
   add_effect("stunned", 1);
-  p->hit(this, bp_torso, -1, type->size, 0);
+  p->hit(this, bp_torso, type->size, 0);
   if (u_see)
-   g->add_msg(_("The %s bounces off %s!"), name().c_str(), p->name.c_str());
+   add_msg(_("The %s bounces off %s!"), name().c_str(), p->name.c_str());
 
   return;
  }
@@ -944,15 +981,15 @@ void monster::knock_back_from(int x, int y)
 // If we're still in the function at this point, we're actually moving a tile!
  if (g->m.ter_at(to.x, to.y).has_flag(TFLAG_DEEP_WATER)) {
   if (g->m.has_flag("LIQUID", to.x, to.y) && can_drown()) {
-   hurt(9999);
+   die( nullptr );
    if (u_see) {
-    g->add_msg(_("The %s drowns!"), name().c_str());
+    add_msg(_("The %s drowns!"), name().c_str());
    }
 
   } else if (has_flag(MF_AQUATIC)) { // We swim but we're NOT in water
-   hurt(9999);
+   die( nullptr );
    if (u_see) {
-    g->add_msg(_("The %s flops around and dies!"), name().c_str());
+    add_msg(_("The %s flops around and dies!"), name().c_str());
    }
   }
  }
@@ -960,10 +997,10 @@ void monster::knock_back_from(int x, int y)
  if (g->m.move_cost(to.x, to.y) == 0) {
 
    // It's some kind of wall.
-   hurt(type->size);
+   apply_damage( nullptr, bp_torso, type->size );
    add_effect("stunned", 2);
    if (u_see) {
-    g->add_msg(_("The %s bounces off a %s."), name().c_str(),
+    add_msg(_("The %s bounces off a %s."), name().c_str(),
                g->m.tername(to.x, to.y).c_str());
    }
 
@@ -982,7 +1019,7 @@ void monster::knock_back_from(int x, int y)
 bool monster::will_reach(int x, int y)
 {
  monster_attitude att = attitude(&(g->u));
- if (att != MATT_FOLLOW && att != MATT_ATTACK && att != MATT_FRIEND)
+ if (att != MATT_FOLLOW && att != MATT_ATTACK && att != MATT_FRIEND && att != MATT_ZLAVE)
   return false;
 
  if (has_flag(MF_DIGS))
@@ -992,7 +1029,7 @@ bool monster::will_reach(int x, int y)
   return false;
 
  std::vector<point> path = g->m.route(posx(), posy(), x, y, has_flag(MF_BASHES));
- if (path.size() == 0)
+ if (path.empty())
    return false;
 
  if (has_flag(MF_SMELLS) && g->scent(posx(), posy()) > 0 &&
@@ -1013,7 +1050,7 @@ bool monster::will_reach(int x, int y)
 int monster::turns_to_reach(int x, int y)
 {
  std::vector<point> path = g->m.route(posx(), posy(), x, y, has_flag(MF_BASHES));
- if (path.size() == 0)
+ if (path.empty())
   return 999;
 
  double turns = 0.;

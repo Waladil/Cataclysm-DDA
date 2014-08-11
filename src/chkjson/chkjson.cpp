@@ -154,7 +154,7 @@ void load_all_from_json(JsonIn &jsin)
 void load_json_dir(std::string const &dirname)
 {
     // get a list of all files in the directory
-    std::vector<std::string> dir = 
+    std::vector<std::string> dir =
         get_files_from_path(".json", dirname, true, true);
     // iterate over each file
     std::vector<std::string>::iterator it;
@@ -179,7 +179,7 @@ void load_json_dir(std::string const &dirname)
     }
 }
 
-int main(int argc, char *argv[])
+int main(int, char **)
 {
     setlocale(LC_ALL, "");
     try {

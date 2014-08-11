@@ -7,11 +7,6 @@
 #include <vector>
 #include <map>
 
-// mfb(n) converts a flag to its appropriate position in covers's bitfield
-#ifndef mfb
-#define mfb(n) static_cast <unsigned long> (1 << (n))
-#endif
-
 std::vector<dream> dreams;
 std::map<std::string, std::vector<std::string> > mutations_category;
 std::map<std::string, mutation_branch> mutation_data;
@@ -28,13 +23,14 @@ void load_mutation(JsonObject &jsobj)
     new_trait.visibility = jsobj.get_int("visibility", 0);
     new_trait.ugliness = jsobj.get_int("ugliness", 0);
     new_trait.startingtrait = jsobj.get_bool("starting_trait", false);
+    new_trait.mixed_effect = jsobj.get_bool("mixed_effect", false);
 
     traits[id] = new_trait;
 
     mutation_data[id].valid = jsobj.get_bool("valid", true);
     mutation_data[id].purifiable = jsobj.get_bool("purifiable", true);
     mutation_data[id].threshold = jsobj.get_bool("threshold", false);
-    
+
     jsarr = jsobj.get_array("prereqs");
     while (jsarr.has_more()) {
         mutation_data[id].prereqs.push_back(jsarr.next_string());
@@ -43,8 +39,7 @@ void load_mutation(JsonObject &jsobj)
     // (Individual prereq-lists are "OR", not "AND".)
     // Traits shoud NOT appear in both lists for a given mutation, unless
     // you want that trait to satisfy both requirements.
-    // These are additional to the first list, and will likely NOT be regained
-    // if you lose the mutation they prereq'd for.
+    // These are additional to the first list.
     jsarr = jsobj.get_array("prereqs2");
     while (jsarr.has_more()) {
         mutation_data[id].prereqs2.push_back(jsarr.next_string());

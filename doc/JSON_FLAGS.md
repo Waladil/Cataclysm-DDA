@@ -76,6 +76,7 @@ List of known flags, used in both terrain.json and furniture.json
 - ```cardreader``` Use the cardreader with a valid card, or attempt to hack.
 - ```rubble``` Clear up the rubble if you have a shovel.
 - ```chainfence``` Hop over the chain fence.
+- ```bars``` Take advantage of AMORPHOUS and slip through the bars.
 - ```tent``` Take down the tent.
 - ```shelter``` Take down the shelter.
 - ```wreckage``` Clear up the wreckage if you have a shovel.
@@ -137,10 +138,10 @@ Flags used to describe monsters and define their properties and abilities.
 - ```CLASSIC``` Only monsters we expect in a classic zombie movie.
 - ```WILDLIFE``` Natural animals.
 
-### Death functions
+### Death functions. Multiple death functions can be used. Not all combinations make sense.
 
-- ```NORMAL``` Drop a body.
-- ```ACID``` Acid instead of a body.
+- ```NORMAL``` Drop a body, leave gibs.
+- ```ACID``` Acid instead of a body. not the same as the ACID_BLOOD flag. In most cases you want both.
 - ```BOOMER``` Explodes in vomit.
 - ```KILL_VINES``` Kill all nearby vines.
 - ```VINE_CUT``` Kill adjacent vine if it's cut.
@@ -149,17 +150,16 @@ Flags used to describe monsters and define their properties and abilities.
 - ```DISINTEGRATE``` Falls apart.
 - ```WORM``` Spawns 2 half-worms
 - ```DISAPPEAR``` Hallucination disappears.
-- ```GUILT``` Moral penalty.
+- ```GUILT``` Moral penalty. There is also a flag with a similar effect.
 - ```BLOBSPLIT``` Creates more blobs.
 - ```MELT``` Normal death, but melts.
 - ```AMIGARA``` Removes hypnosis if the last one.
 - ```THING``` Turn into a full thing.
 - ```EXPLODE``` Damaging explosion.
-- ```BROKEN``` Spawns a broken robot.
+- ```BROKEN``` Spawns a broken robot item, its id calculated like this: the prefix "mon_" is removed from the monster id, than the prefix "broken_" is added. Example: mon_eyebot -> broken_eyebot
 - ```RATKING``` Cure verminitis.
 - ```KILL_BREATHERS``` All breathers die.
 - ```SMOKEBURST``` Explode like a huge smoke bomb.
-- ```ZOMBIE``` Generate proper clothing for zombies.
 - ```GAMEOVER``` Game over man! Game over! Defense mode.
 
 ### Flags
@@ -208,7 +208,8 @@ Flags used to describe monsters and define their properties and abilities.
 - ```FUR``` May produce fur when butchered.
 - ```LEATHER``` May produce leather when butchered.
 - ```FEATHER``` May produce feathers when butchered.
-- ```CBM``` May produce a cbm or two when butchered.
+- ```FAT``` May produce fat when butchered.
+- ```CBM_CIV``` May produce a common cbm or two when butchered.
 - ```BONES``` May produce bones and sinews when butchered.
 - ```IMMOBILE``` Doesn't move (e.g. turrets)
 - ```FRIENDLY_SPECIAL``` Use our special attack, even if friendly.
@@ -224,6 +225,15 @@ Flags used to describe monsters and define their properties and abilities.
 - ```VERMIN``` Creature is too small for normal combat, butchering etc.
 - ```HUNTS_VERMIN``` Creature uses vermin as a food source.
 - ```SMALL_BITER``` Creature can cause a painful, non-damaging bite.
+- ```ABSORBS``` Consumes objects it moves over.
+- ```LARVA``` Creature is a larva. Currently used for gib and blood handling.
+- ```ARTHROPOD_BLOOD``` Forces monster to bleed hemolymph.
+- ```ACID_BLOOD``` Makes monster bleed acid. Fun stuff! Does not automatically dissolve in a pool of acid on death.
+- ```BILE_BLOOD``` Makes monster bleed bile.
+- ```REGEN_MORALE``` Will stop fleeing if at max hp, and regen anger and morale.
+- ```CBM_POWER``` May produce a power CBM when butchered, independent of CBM.
+- ```CBM_SCI``` May produce a cbm or two from bionics_sci when butchered.
+- ```CBM_OP``` May produce a cbm or two from bionics_op when butchered.
 
 ### Special attacks
 Some special attacks are also valid use actions for tools and weapons.
@@ -231,6 +241,7 @@ Some special attacks are also valid use actions for tools and weapons.
 - ```NONE``` No special attack.
 - ```ANTQUEEN``` Hatches/grows: `egg > ant > soldier`.
 - ```SHRIEK``` "a terrible shriek!"
+- ```HOWL``` "an ear-piercing howl!"
 - ```RATTLE``` "a sibilant rattling sound!"
 - ```ACID``` Spit acid.
 - ```SHOCKSTORM``` Shoots bolts of lightning.
@@ -264,6 +275,7 @@ Some special attacks are also valid use actions for tools and weapons.
 - ```TAZER``` Shock the player.
 - ```SMG``` SMG turret fires.
 - ```LASER``` Laser turret fires.
+  ```RIFLE_TUR``` Rifle turret fires.
 - ```FLAMETHROWER``` Shoots a stream fire.
 - ```COPBOT``` Cop-bot alerts and then tazes the player.
 - ```MULTI_ROBOT``` Robot can attack with tazer, flamethrower or SMG depending on distance.
@@ -274,7 +286,7 @@ Some special attacks are also valid use actions for tools and weapons.
 - ```BITE``` Bites the player.
 - ```BRANDISH``` Brandish a knife at the player.
 - ```FLESH_GOLEM``` Attack the player with claw, and inflict disease `downed` if the attack connects.
-- ```PARROT``` Parrots the speech defined in `migo_speech.json`
+- ```PARROT``` Parrots the speech defined in `speech.json`, picks one of the lines randomly. "speaker" points to a monster id.
 
 ### Anger, Fear & Placation Triggers
 
@@ -326,7 +338,7 @@ These branches are also the valid entries for the categories of `dreams` in `dre
 - ```MUTCAT_CEPHALOPOD``` "Your mind is overcome by images of eldritch horrors...and then they pass."
 - ```MUTCAT_BIRD``` "Your body lightens and you long for the sky."
 - ```MUTCAT_LIZARD``` "For a heartbeat, your body cools down."
-- ```MUTCAT_TROGLO``` "You yearn for a cool, dark place to hide."
+- ```MUTCAT_TROGLOBITE``` "You yearn for a cool, dark place to hide."
 - ```MUTCAT_ALPHA``` "You feel...better. Somehow."
 - ```MUTCAT_MEDICAL``` "Your can feel the blood rushing through your veins and a strange, medicated feeling washes over your senses."
 - ```MUTCAT_CHIMERA``` "You need to roar, bask, bite, and flap. NOW."
@@ -378,7 +390,7 @@ These branches are also the valid entries for the categories of `dreams` in `dre
 - ```CONTROLS``` Can be used to control the vehicle.
 - ```MUFFLER``` Muffles the noise a vehicle makes while running.
 - ```CURTAIN``` Can be installed over a part flagged with `WINDOW`, and functions the same as blinds found on windows in buildings.
-- ```SOLAR_PANEL``` Recharges vehicle batteries when exposed to sunlight.
+- ```SOLAR_PANEL``` Recharges vehicle batteries when exposed to sunlight. Has a 1 in 4 chance of being broken on car generation.
 - ```KITCHEN``` Acts as a kitchen unit and heat source for crafting.
 - ```WELDRIG``` Acts as a welder for crafting.
 - ```CRAFTRIG``` Acts as a dehydrator, vacuum sealer and reloading press for crafting purposes. Potentially to include additional tools in the future.
@@ -522,7 +534,9 @@ Some armor flags, such as `WATCH` and `ALARMCLOCK` are compatible with other ite
 
 - ```FIT``` Reduces encumbrance by one.
 - ```VARSIZE``` Can be made to fit via tailoring.
-- ```SKINTIGHT``` Reduces clothing layering penalty.
+- ```SKINTIGHT``` Undergarment layer.
+- ```OUTER```  Outer garment layer.
+- ```BELTED``` Layer for belts and backpacks.
 - ```WATER_FRIENDLY``` Prevents the covered body part(s) from getting drenched with water.
 - ```WATERPROOF``` Prevents the covered body-part(s) from getting wet in any circumstance.
 - ```RAINPROOF``` Prevents the covered body-part(s) from getting wet in the rain.
@@ -630,7 +644,7 @@ Some armor flags, such as `WATCH` and `ALARMCLOCK` are compatible with other ite
 
 ## Containers
 
-- ```RIGID``` Unused?
+- ```RIGID``` Volume of the item does not include volume of the content. Without that flag the volume of the contents are added to the volume of the container.
 - ```WATERTIGHT``` Can hold liquids.
 - ```SEALS``` Can be resealed.
 
@@ -646,6 +660,10 @@ Some armor flags, such as `WATCH` and `ALARMCLOCK` are compatible with other ite
 - ```NON_STUCK``` Resistant to getting stuck in a monster; not as large of an effect as `MESSY`.
 - ```UNARMED_WEAPON``` Wielding this item still counts as unarmed combat.
 - ```NO_UNWIELD``` Cannot unwield this item.
+- ```SHEATH_SWORD``` Item can be sheathed in a sword scabbard
+- ```IAIJUTSU``` Sword can slash at an enemy as it's drawn if cutting skill is above 7 and a roll is passed
+- ```SHEATH_KNIFE``` Item can be sheathed in a knife sheath
+- ```QUIVER_n``` Item can hold n arrows (will parse number as integer)
 
 ## Guns
 
@@ -653,6 +671,7 @@ Some armor flags, such as `WATCH` and `ALARMCLOCK` are compatible with other ite
 - ```RELOAD_AND_SHOOT``` Firing automatically reloads and then shoots.
 - ```RELOAD_ONE``` Only reloads one round at a time.
 - ```NO_AMMO``` Does not directly have a loaded ammo type.
+- ```BIO_WEAPON``` Weapon is a CBM weapon, uses power as ammo. (CBM weapons should get both NO_AMMO and BIO_WEAPON, to work correctly).
 - ```USE_UPS``` Uses 5 UPS charges per shot, or 3 advanced UPS charges.
 - ```USE_UPS_20``` Uses 20 UPS charges per shot, or 12 advanced UPS charges.
 - ```USE_UPS_40``` Uses 40 UPS charges per shot, or 24 advanced UPS charges.
@@ -662,6 +681,7 @@ Some armor flags, such as `WATCH` and `ALARMCLOCK` are compatible with other ite
 - ```FIRE_100``` Uses 100 shots per firing.
 - ```BACKBLAST``` Causes a small explosion behind the person firing the weapon. Currently not implemented?
 - ```STR_RELOAD``` Reload speed is affected by strength.
+- ```RELOAD_EJECT``` Ejects shell from gun on reload instead of when fired.
 
 ## Tools
 
@@ -672,7 +692,7 @@ Melee flags are fully compatible with tool flags, and vice versa.
 - ```CHARGEDIM``` If illuminated, light intensity fades with charge, starting at 20% charge left.
 - ```FIRE``` Counts as a fire for crafting purposes.
 - ```WRAP``` Unused?
-- ```RECHARGE``` Gain charges when placed in a cargo area with a recharge station. 
+- ```RECHARGE``` Gain charges when placed in a cargo area with a recharge station.
 
 ### Use actions
 
@@ -813,6 +833,11 @@ Melee flags are fully compatible with tool flags, and vice versa.
 - ```HORN_BICYCLE``` Honk the horn.
 - ```RAD_BADGE``` Take the radiation badge out of its protective case to start measuring absorbed dosage.
 - ```AIRHORN``` Sound the horn.
+- ```BELL``` Ring the bell.
+- ```SEED``` Asks if you are sure that you want to eat the seed. As it is better to plant seeds.
+- ```OXYGEN_BOTTLE```
+- ```ATOMIC_BATTERY```
+- ```FISHING_BASIC``` Use a fishing rod
 - ```JET_INJECTOR``` Inject some jet drugs right into your veins.
 
 ## Skills
